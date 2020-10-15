@@ -9,14 +9,13 @@ mod s3d_test;
 
 const DEBUG: bool = false;
 
-/// S3DArchive describes the content of an S3D archive.
-/// This is the data format used in .s3d and .eqg files
-pub struct S3DArchive {
+/// PFSArchive describes the content of an PFS archive.
+pub struct PFSArchive {
     pub basename: String,
-    pub files: Vec<S3DFileEntry>,
+    pub files: Vec<PFSFileEntry>,
 }
 
-impl S3DArchive {
+impl PFSArchive {
     pub fn new(basename: &str) -> Self {
         Self {
             files: Vec::new(),
@@ -25,7 +24,7 @@ impl S3DArchive {
     }
 
     /// Returns file entry by name
-    pub fn find(&self, name: &str) -> Option<&S3DFileEntry> {
+    pub fn find(&self, name: &str) -> Option<&PFSFileEntry> {
         for f in &self.files {
             if f.name == name {
                 return Some(f);
@@ -36,7 +35,7 @@ impl S3DArchive {
 
     /// Returns the default wld, named infile-without-ext.wld.
     /// This function is only usable while working with .s3d archives
-    pub fn default_wld(&self) -> Option<&S3DFileEntry> {
+    pub fn default_wld(&self) -> Option<&PFSFileEntry> {
         let expected = format!("{}.wld", self.basename);
         for f in &self.files {
             if f.name == expected {
@@ -47,7 +46,7 @@ impl S3DArchive {
     }
 }
 
-pub struct S3DFileEntry {
+pub struct PFSFileEntry {
     /// uncompressed data
     pub data: Vec<u8>,
     pub crc: u32,
@@ -67,7 +66,7 @@ impl fmt::Display for ParseError {
 }
 
 /// Parses a PFS archive
-pub fn parse_pfs(filename: &str) -> Result<S3DArchive, ParseError> {
+pub fn parse_pfs(filename: &str) -> Result<PFSArchive, ParseError> {
 
     let data = read_binary(filename).unwrap();
     let basename = Path::new(filename).file_stem().unwrap().to_str().unwrap();
@@ -87,7 +86,7 @@ pub fn parse_pfs(filename: &str) -> Result<S3DArchive, ParseError> {
         println!("count {}", count);
     }
 
-    let mut archive = S3DArchive::new(basename);
+    let mut archive = PFSArchive::new(basename);
     let mut dir_data = Vec::new();
 
     for i in 0..count {
@@ -100,7 +99,7 @@ pub fn parse_pfs(filename: &str) -> Result<S3DArchive, ParseError> {
             println!("s3d file {}: offset {:08X}, size {:08X}, crc {:08X}", i, offset, size, crc);
         }
 
-        let mut file_entry = S3DFileEntry {
+        let mut file_entry = PFSFileEntry {
             data: Vec::new(),
             name: String::new(),
             crc,

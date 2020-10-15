@@ -5,10 +5,10 @@ use clap::{Arg, App};
 use eqformat_pfs::pfs::parse_pfs;
 
 fn main() {
-    let matches = App::new("s3d-extract")
+    let matches = App::new("extract-pfs")
         .version("0.1.0")
         .arg(Arg::with_name("INPUT")
-            .help("Set the .s3d file to use")
+            .help("Set the PFS file to use")
             .required(true)
             .index(1))
         .arg(Arg::with_name("OUTDIR")
