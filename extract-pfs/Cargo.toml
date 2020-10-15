@@ -1,0 +1,16 @@
+[package]
+name = "extract-pfs"
+version = "0.1.2"
+authors = ["Martin Lindhe <martin@ubique.se>"]
+edition = "2018"
+license = "MIT"
+
+[[bin]]
+name = "extract-pfs"
+path = "src/main.rs"
+test = false
+
+[dependencies]
+eqformat_pfs = { path = "../" }
+
+clap = "2.33"

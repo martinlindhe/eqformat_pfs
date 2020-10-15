@@ -9,4 +9,4 @@ Parser for PFS archive format used in Everquest resources (.s3d, .eqg, .pfs, .pa
 
 ## Tools
 
-[extract-pfs](src/bin/extract-pfs) - Extract PFS archives
+[extract-pfs](extract-pfs) - Extract PFS archives
