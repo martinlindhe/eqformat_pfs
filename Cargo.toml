@@ -1,0 +1,19 @@
+[package]
+name = "eqformat_pfs"
+version = "0.1.0"
+authors = ["Martin Lindhe <martin@ubique.se>"]
+edition = "2018"
+license = "MIT"
+description = "Parser for PFS archive format used in Everquest resources (.s3d, .eqg, .pfs, .pak)"
+
+[[bin]]
+name = "extract-pfs"
+path = "src/bin/extract-pfs/main.rs"
+test = false
+
+[lib]
+doctest = false
+
+[dependencies]
+clap = "2.33"
+inflate = "0.4"
