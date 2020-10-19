@@ -1,6 +1,6 @@
 [package]
 name = "eqformat_pfs"
-version = "0.1.3"
+version = "0.1.5"
 authors = ["Martin Lindhe <martin@ubique.se>"]
 edition = "2018"
 license = "MIT"
