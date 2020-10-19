@@ -23,6 +23,18 @@ impl PFSArchive {
         }
     }
 
+    pub fn from_file(filename: &str) -> Result<Self, ParseError> {
+        let data = read_binary(filename).unwrap();
+
+        match Self::from_u8(&data) {
+            Ok(mut pfs) => {
+                pfs.basename = Path::new(filename).file_stem().unwrap().to_str().unwrap().to_string();
+                Ok(pfs)
+            }
+            Err(e) => Err(e),
+        }
+    }
+
     pub fn from_u8(data: &[u8]) -> Result<Self, ParseError> {
         let content_offset = read_u32(&data, 0) as usize;
         let magic = read_u32(&data, 4);
@@ -167,16 +179,9 @@ impl fmt::Display for ParseError {
 }
 
 /// Parses a PFS archive
+#[deprecated(note = "Please use PFSArchive::from_file() instead")]
 pub fn parse_pfs(filename: &str) -> Result<PFSArchive, ParseError> {
-
-    let data = read_binary(filename).unwrap();
-
-    if let Ok(mut pfs) = PFSArchive::from_u8(&data) {
-        pfs.basename = Path::new(filename).file_stem().unwrap().to_str().unwrap().to_string();
-        Ok(pfs)
-    } else {
-        Err(ParseError{message: "not a s3d".to_string()})
-    }
+    PFSArchive::from_file(filename)
 }
 
 fn read_u32(data: &[u8], offset: usize) -> u32 {

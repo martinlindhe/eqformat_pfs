@@ -2,7 +2,7 @@ use std::fs;
 
 use clap::{Arg, App};
 
-use eqformat_pfs::pfs::parse_pfs;
+use eqformat_pfs::pfs::PFSArchive;
 
 fn main() {
     let matches = App::new("extract-pfs")
@@ -19,7 +19,7 @@ fn main() {
         .get_matches();
 
     let filename = matches.value_of("INPUT").unwrap();
-    let s3d = match parse_pfs(filename) {
+    let s3d = match PFSArchive::from_file(filename) {
         Ok(v) => v,
         Err(e) => panic!("err {}", e),
     };
