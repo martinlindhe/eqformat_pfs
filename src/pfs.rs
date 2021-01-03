@@ -135,8 +135,18 @@ impl PFSArchive {
         Ok(archive)
     }
 
+    /// Returns file data by name
+    pub fn get(&self, name: &str) -> Option<&[u8]> {
+        for f in &self.files {
+            if f.name == name {
+                return Some(&f.data);
+            }
+        }
+        None
+    }
+
     /// Returns file entry by name
-    pub fn find(&self, name: &str) -> Option<&PFSFileEntry> {
+    pub fn get_entry(&self, name: &str) -> Option<&PFSFileEntry> {
         for f in &self.files {
             if f.name == name {
                 return Some(f);
@@ -178,12 +188,6 @@ impl fmt::Display for ParseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.message)
     }
-}
-
-/// Parses a PFS archive
-#[deprecated(note = "Please use PFSArchive::from_file() instead")]
-pub fn parse_pfs(filename: &str) -> Result<PFSArchive, ParseError> {
-    PFSArchive::from_file(filename)
 }
 
 fn read_u32(data: &[u8], offset: usize) -> u32 {

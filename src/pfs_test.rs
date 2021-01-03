@@ -12,7 +12,7 @@ fn can_parse_s3d() {
     assert_eq!("charlev03.dds", s3d.files[3].name);
     assert_eq!("palette.bmp", s3d.files[4].name);
 
-    let wld_entry = s3d.find("chardok_2_obj.wld").unwrap();
+    let wld_entry = s3d.get_entry("chardok_2_obj.wld").unwrap();
     assert_eq!("chardok_2_obj.wld", wld_entry.name);
 
     let wld_default = s3d.default_wld().unwrap();
