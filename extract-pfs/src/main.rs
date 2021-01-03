@@ -19,7 +19,7 @@ fn main() {
         .get_matches();
 
     let filename = matches.value_of("INPUT").unwrap();
-    let s3d = match PFSArchive::from_file(filename) {
+    let archive = match PFSArchive::from_file(filename) {
         Ok(v) => v,
         Err(e) => panic!("err {}", e),
     };
@@ -27,7 +27,7 @@ fn main() {
     let outdir = matches.value_of("OUTDIR").unwrap();
     fs::create_dir_all(outdir).unwrap();
 
-    for f in &s3d.files {
+    for f in &archive.files {
         let outname = format!("{}/{}", outdir, f.name);
         println!("Writing {}", outname);
         fs::write(outname, f.data.clone()).expect("Unable to write file");
