@@ -1,9 +1,9 @@
 
-use crate::pfs::parse_pfs;
+use crate::pfs::PFSArchive;
 
 #[test]
 fn can_parse_s3d() {
-    let s3d = parse_pfs("samples/chardok_2_obj.s3d").unwrap();
+    let s3d = PFSArchive::from_file("samples/chardok_2_obj.s3d").unwrap();
 
     assert_eq!(5, s3d.files.len());
     assert_eq!("chardok_2_obj.wld", s3d.files[0].name);
@@ -21,7 +21,7 @@ fn can_parse_s3d() {
 
 #[test]
 fn can_parse_s3d_order() {
-    let s3d = parse_pfs("samples/butcher2_chr.s3d").unwrap();
+    let s3d = PFSArchive::from_file("samples/butcher2_chr.s3d").unwrap();
 
     assert_eq!(9, s3d.files.len());
     assert_eq!("butcher2_chr.wld", s3d.files[8].name);
@@ -30,7 +30,7 @@ fn can_parse_s3d_order() {
 
 #[test]
 fn can_parse_eqg() {
-    let s3d = parse_pfs("samples/guildhalldoor.eqg").unwrap();
+    let s3d = PFSArchive::from_file("samples/guildhalldoor.eqg").unwrap();
 
     assert_eq!(1, s3d.files.len());
     assert_eq!("obj_guild_door_switch.mod", s3d.files[0].name);

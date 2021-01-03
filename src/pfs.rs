@@ -23,6 +23,7 @@ impl PFSArchive {
         }
     }
 
+    /// parses file as a PFSArchive
     pub fn from_file(filename: &str) -> Result<Self, ParseError> {
         let data = read_binary(filename).unwrap();
 
@@ -35,6 +36,7 @@ impl PFSArchive {
         }
     }
 
+    /// parses [u8] as a PFSArchive
     pub fn from_u8(data: &[u8]) -> Result<Self, ParseError> {
         let content_offset = read_u32(&data, 0) as usize;
         let magic = read_u32(&data, 4);
@@ -120,7 +122,7 @@ impl PFSArchive {
             let buf = &dir_data[dir_cursor..dir_cursor + filename_len - 1];
             let filename = match str::from_utf8(buf) {
                 Ok(v) => v,
-                Err(e) => return Err(ParseError{message: format!("invalid utfd-8 sequence: {}", e)}),
+                Err(e) => return Err(ParseError{message: format!("invalid utf-8 sequence: {}", e)}),
             };
             dir_cursor += filename_len;
             f.name = String::from(filename);
