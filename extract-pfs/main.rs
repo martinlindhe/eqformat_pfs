@@ -8,13 +8,13 @@ fn main() {
     let matches = App::new("extract-pfs")
         .version("0.1.0")
         .arg(
-            Arg::with_name("INPUT")
+            Arg::new("INPUT")
                 .help("Set the PFS file to use")
                 .required(true)
                 .index(1),
         )
         .arg(
-            Arg::with_name("OUTDIR")
+            Arg::new("OUTDIR")
                 .long("outdir")
                 .takes_value(true)
                 .required(true)
