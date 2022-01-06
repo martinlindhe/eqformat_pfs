@@ -9,8 +9,12 @@ repository = "https://github.com/martinlindhe/eqformat_pfs"
 
 [dependencies]
 inflate = "0.4"
+clap = "2.33"
 
-[workspace]
-members = [
-    "extract-pfs",
-]
+[lib]
+name = "eqformat_pfs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "extract-pfs"
+path = "extract-pfs/main.rs"

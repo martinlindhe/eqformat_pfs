@@ -6,6 +6,9 @@
         "EQGM",
         "guildhalldoor",
         "outdir",
-        "ssratemple"
+        "rustfmt",
+        "RUSTTARGET",
+        "ssratemple",
+        "taiki"
     ]
 }
