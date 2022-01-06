@@ -1,21 +1,25 @@
 use std::fs;
 
-use clap::{Arg, App};
+use clap::{App, Arg};
 
 use eqformat_pfs::pfs::PFSArchive;
 
 fn main() {
     let matches = App::new("extract-pfs")
         .version("0.1.0")
-        .arg(Arg::with_name("INPUT")
-            .help("Set the PFS file to use")
-            .required(true)
-            .index(1))
-        .arg(Arg::with_name("OUTDIR")
-            .long("outdir")
-            .takes_value(true)
-            .required(true)
-            .help("Set the output directory"))
+        .arg(
+            Arg::with_name("INPUT")
+                .help("Set the PFS file to use")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::with_name("OUTDIR")
+                .long("outdir")
+                .takes_value(true)
+                .required(true)
+                .help("Set the output directory"),
+        )
         .get_matches();
 
     let filename = matches.value_of("INPUT").unwrap();

@@ -1,5 +1,5 @@
-use std::{fmt, str};
 use std::path::Path;
+use std::{fmt, str};
 
 use inflate::inflate_bytes_zlib;
 
@@ -29,7 +29,12 @@ impl PFSArchive {
 
         match Self::from_u8(&data) {
             Ok(mut pfs) => {
-                pfs.basename = Path::new(filename).file_stem().unwrap().to_str().unwrap().to_string();
+                pfs.basename = Path::new(filename)
+                    .file_stem()
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string();
                 Ok(pfs)
             }
             Err(e) => Err(e),
@@ -41,7 +46,9 @@ impl PFSArchive {
         let content_offset = read_u32(data, 0) as usize;
         let magic = read_u32(data, 4);
         if magic != 0x20534650 {
-            return Err(ParseError{message: "not a s3d".to_string()});
+            return Err(ParseError {
+                message: "not a s3d".to_string(),
+            });
         }
 
         if DEBUG {
@@ -61,12 +68,15 @@ impl PFSArchive {
 
         for i in 0..count {
             let cursor = content_offset as usize + 4 + (i * 12);
-            let crc  = read_u32(data, cursor);
+            let crc = read_u32(data, cursor);
             let offset = read_u32(data, cursor + 4);
             let size = read_u32(data, cursor + 8) as usize;
 
             if DEBUG {
-                println!("s3d file {}: offset {:08X}, size {:08X}, crc {:08X}", i, offset, size, crc);
+                println!(
+                    "s3d file {}: offset {:08X}, size {:08X}, crc {:08X}",
+                    i, offset, size, crc
+                );
             }
 
             let mut file_entry = PFSFileEntry {
@@ -84,10 +94,13 @@ impl PFSArchive {
                 let expanded_len = read_u32(data, read_cursor) as usize;
                 read_cursor += 4;
 
-                let expanded = inflate_bytes_zlib(&data[read_cursor..read_cursor+compressed_len]).unwrap();
+                let expanded =
+                    inflate_bytes_zlib(&data[read_cursor..read_cursor + compressed_len]).unwrap();
 
                 if expanded.len() != expanded_len {
-                    return Err(ParseError{message: "zlib decompress failed".to_string()});
+                    return Err(ParseError {
+                        message: "zlib decompress failed".to_string(),
+                    });
                 }
 
                 file_entry.data.extend(expanded);
@@ -102,14 +115,18 @@ impl PFSArchive {
         }
 
         if dir_data.is_empty() {
-            return Err(ParseError{message: "no directory entry found".to_string()});
+            return Err(ParseError {
+                message: "no directory entry found".to_string(),
+            });
         }
 
         let mut dir_cursor = 0;
         let dir_len = read_u32(&dir_data, dir_cursor) as usize;
         dir_cursor += 4;
         if dir_len != archive.files.len() {
-            return Err(ParseError{message: "directory does not match file length".to_string()});
+            return Err(ParseError {
+                message: "directory does not match file length".to_string(),
+            });
         }
 
         // The list of filenames will only match the chunks if the chunk list is sorted by offset ascending
@@ -122,13 +139,20 @@ impl PFSArchive {
             let buf = &dir_data[dir_cursor..dir_cursor + filename_len - 1];
             let filename = match str::from_utf8(buf) {
                 Ok(v) => v,
-                Err(e) => return Err(ParseError{message: format!("invalid utf-8 sequence: {}", e)}),
+                Err(e) => {
+                    return Err(ParseError {
+                        message: format!("invalid utf-8 sequence: {}", e),
+                    })
+                }
             };
             dir_cursor += filename_len;
             f.name = String::from(filename);
 
             if DEBUG {
-                println!("s3d file: offset {:08X}, crc {:08X}, name = {}", f.offset, f.crc, f.name);
+                println!(
+                    "s3d file: offset {:08X}, crc {:08X}, name = {}",
+                    f.offset, f.crc, f.name
+                );
             }
         }
 
@@ -192,7 +216,7 @@ impl fmt::Display for ParseError {
 
 fn read_u32(data: &[u8], offset: usize) -> u32 {
     let mut bytes = [0; 4];
-    bytes.copy_from_slice(&data[offset..offset+4]);
+    bytes.copy_from_slice(&data[offset..offset + 4]);
     u32::from_le_bytes(bytes)
 }
 
