@@ -24,12 +24,12 @@ fn main() {
         Err(e) => panic!("err {}", e),
     };
 
-    let outdir = matches.value_of("OUTDIR").unwrap();
-    fs::create_dir_all(outdir).unwrap();
+    let out_dir = matches.value_of("OUTDIR").unwrap();
+    fs::create_dir_all(out_dir).unwrap();
 
     for f in &archive.files {
-        let outname = format!("{}/{}", outdir, f.name);
-        println!("Writing {}", outname);
-        fs::write(outname, f.data.clone()).expect("Unable to write file");
+        let out_name = format!("{}/{}", out_dir, f.name);
+        println!("Writing {}", out_name);
+        fs::write(out_name, f.data.clone()).expect("Unable to write file");
     }
 }

@@ -1,8 +1,8 @@
 [package]
 name = "eqformat_pfs"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Martin Lindhe <martin@ubique.se>"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 description = "Parser for PFS archive format used in Everquest resources (.s3d, .eqg, .pfs, .pak)"
 repository = "https://github.com/martinlindhe/eqformat_pfs"

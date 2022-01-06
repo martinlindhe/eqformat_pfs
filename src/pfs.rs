@@ -38,8 +38,8 @@ impl PFSArchive {
 
     /// parses [u8] as a PFSArchive
     pub fn from_u8(data: &[u8]) -> Result<Self, ParseError> {
-        let content_offset = read_u32(&data, 0) as usize;
-        let magic = read_u32(&data, 4);
+        let content_offset = read_u32(data, 0) as usize;
+        let magic = read_u32(data, 4);
         if magic != 0x20534650 {
             return Err(ParseError{message: "not a s3d".to_string()});
         }
@@ -48,7 +48,7 @@ impl PFSArchive {
             println!("content_offset: {:08X}", content_offset);
         }
 
-        let count = read_u32(&data, content_offset as usize) as usize;
+        let count = read_u32(data, content_offset as usize) as usize;
         if DEBUG {
             println!("count {}", count);
         }
@@ -61,9 +61,9 @@ impl PFSArchive {
 
         for i in 0..count {
             let cursor = content_offset as usize + 4 + (i * 12);
-            let crc  = read_u32(&data, cursor);
-            let offset = read_u32(&data, cursor + 4);
-            let size = read_u32(&data, cursor + 8) as usize;
+            let crc  = read_u32(data, cursor);
+            let offset = read_u32(data, cursor + 4);
+            let size = read_u32(data, cursor + 8) as usize;
 
             if DEBUG {
                 println!("s3d file {}: offset {:08X}, size {:08X}, crc {:08X}", i, offset, size, crc);
@@ -79,9 +79,9 @@ impl PFSArchive {
             let mut read_cursor = offset as usize;
 
             while file_entry.data.len() < size {
-                let compressed_len = read_u32(&data, read_cursor) as usize;
+                let compressed_len = read_u32(data, read_cursor) as usize;
                 read_cursor += 4;
-                let expanded_len = read_u32(&data, read_cursor) as usize;
+                let expanded_len = read_u32(data, read_cursor) as usize;
                 read_cursor += 4;
 
                 let expanded = inflate_bytes_zlib(&data[read_cursor..read_cursor+compressed_len]).unwrap();
@@ -106,9 +106,9 @@ impl PFSArchive {
         }
 
         let mut dir_cursor = 0;
-        let dirlen = read_u32(&dir_data, dir_cursor) as usize;
+        let dir_len = read_u32(&dir_data, dir_cursor) as usize;
         dir_cursor += 4;
-        if dirlen != archive.files.len() {
+        if dir_len != archive.files.len() {
             return Err(ParseError{message: "directory does not match file length".to_string()});
         }
 
@@ -155,7 +155,7 @@ impl PFSArchive {
         None
     }
 
-    /// Returns the default wld, named infile-without-ext.wld.
+    /// Returns the default wld, filename-without-ext.wld.
     /// This function is only usable while working with .s3d archives
     pub fn default_wld(&self) -> Option<&PFSFileEntry> {
         if self.basename.is_empty() {

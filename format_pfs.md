@@ -1,6 +1,6 @@
 # PFS file format
 
-The file format called "PFS" in this document is an archive format used in Everquest.
+The file format called "PFS" in this document is an archive format used in EverQuest.
 Extensions: .s3d, .eqg, .pfs, .pak
 
 Every PFS has a "directory" entry, that contains the filenames
@@ -25,14 +25,14 @@ ofs_file    + 0     u32         len_comp        compressed length
                                 multiple compressed blocks (extract until buffer len is expanded_size)
 
 ofs_dir     + 0     u32         entry length
-            + 4     u32         fname_len
-            + 8     fname_len   0-padded file name
+            + 4     u32         filename_len
+            + 8     filename_len 0-padded file name
 
 
 
 ssratemple.s3d - the level map is embedded as ssratemple.wld
 ssratemple_chr.s3d - zone specific models ?
-ssratemple_obj.s3d - zone objs ?
+ssratemple_obj.s3d - zone objects ?
 
 
 
